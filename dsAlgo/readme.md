@@ -60,7 +60,7 @@ Boundary Traversal
 
 Serialize & Deserialize a Binary Tree
 
-#Stage 6: Special Trees
+#`Stage 6: Special Trees`
 
 N-ary Trees basics
 
