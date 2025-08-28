@@ -1,42 +1,42 @@
-##🌳 Learning Path for Trees (our roadmap)
+##`🌳 Learning Path for Trees (our roadmap)`
 
-#Stage 1: Basics (Building Foundations)
+#`Stage 1: Basics (Building Foundations)`
 
-TreeNode structure (✅ you already know this)
+TreeNode structure 
 
-Traversals (DFS): preorder, inorder, postorder (✅ done)
+Traversals (DFS): preorder, inorder, postorder 
 
-Height / Depth of tree (✅ done)
+Height / Depth of tree 
 
-Count total nodes (✅ done)
+Count total nodes
 
 Sum of all nodes
 
-Find maximum / minimum node
+Find the maximum/minimum node
 
-#Stage 2: Traversal Variants
+#`Stage 2: Traversal Variants`
 
 Level Order Traversal (BFS with queue)
 
-Count number of leaf nodes
+Count the number of leaf nodes.
 
 Count number of full nodes (nodes with 2 children)
 
 Count number of half nodes (nodes with 1 child)
 
-#Stage 3: Problem Solving Patterns
+#`Stage 3: Problem Solving Patterns`
 
-Diameter of Binary Tree
+Diameter of a Binary Tree
 
-Check if two trees are identical
+Check if two trees are identical.
 
 Mirror of a tree
 
-Check if tree is balanced
+Check if the tree is balanced
 
 Lowest Common Ancestor (LCA)
 
-#Stage 4: Binary Search Tree (BST)
+#`Stage 4: Binary Search Tree (BST)`
 
 What is a BST (rules)
 
@@ -48,7 +48,7 @@ Delete in BST
 
 Check if tree is a BST
 
-#Stage 5: Advanced Tree Problems
+#`Stage 5: Advanced Tree Problems`
 
 Path Sum problems (e.g., root-to-leaf sum = target)
 
@@ -60,7 +60,7 @@ Boundary Traversal
 
 Serialize & Deserialize a Binary Tree
 
-#Stage 6: Special Trees
+#`Stage 6: Special Trees`
 
 N-ary Trees basics
 
@@ -68,4 +68,4 @@ Trie (Prefix Tree) basics
 
 Heap (Binary Heap) basics
 
-##⚡ By following this roadmap, you’ll go from basic tree operations → problem-solving → BSTs → advanced & special trees.
+##⚡` By following this roadmap, you’ll go from basic tree operations → problem-solving → BSTs → advanced & special trees.`
