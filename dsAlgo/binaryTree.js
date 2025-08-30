@@ -146,7 +146,7 @@ function getTotalNonLeafNodes(node) {
 
 /*
 -------------------------------------------------------------
-Find the Diameter of a Binary Tree (longest path between any two nodes).
+Find the Diameter of a Binary Tree (longest path between any two nodes)(O)N2).
 */
 function diameterOfTree(node) {
   if (node == null) return { height: 0, diameter: 0 };
@@ -166,7 +166,48 @@ function diameterOfTree(node) {
 
   return { height: currentHeight, diameter: currentDiameter };
 }
-// console.log(diameterOfTree(node))
+// console.log(diameterOfTree(node));
+
+/*
+same above question with O(N)
+*/
+function diameterOfBinaryTree() {
+  let diameter = 0;
+
+  function height(node) {
+    if (!node) return 0;
+
+    let left = height(node.left);
+    let right = height(node.right);
+
+    diameter = Math.max(diameter, left + right);
+    return 1 + Math.max(left, right);
+  }
+  height(node);
+  return diameter;
+}
+// console.log(diameterOfBinaryTree(node));
+
+/*
+------------------------------------------------------------------------
+Problem: Maximum Path Sum in a Binary Tree
+*/
+let maxPathValue = -Infinity;
+
+function maxPath(node) {
+  if (node == null) return 0;
+
+  let left = Math.max(0, maxPath(node.left));
+  let right = Math.max(0, maxPath(node.right));
+
+  let pathSum = node.value + left + right;
+
+  maxPathValue = Math.max(maxPathValue, pathSum);
+
+  return node.value + Math.max(left, right);
+}
+maxPath(node);
+// console.log(maxPathValue);
 
 /*
 -----------------------------------------------------------------
@@ -238,4 +279,96 @@ function getLCA(node, p, q) {
   if (left && right) return node;
   return left ? left : right;
 }
-console.log(getLCA(node, 4, 5)?.value);
+// console.log(getLCA(node, 4, 5)?.value);
+
+/*
+-------------------------------------------
+Stage 4: Binary Search Tree (BST) (BFS)
+-----------------------------------------
+
+DFS (recursion) → goes deep into one branch before moving to another.
+BFS (queue) → goes level by level, perfect for this problem.
+*/
+
+//Problem: flat Level Order Traversal (Breadth-First Search, BFS) (next question is actual level)
+function levelOrder(node) {
+  const queue = [];
+  let result = [];
+
+  queue.push(node);
+
+  while (queue.length) {
+    let current = queue.shift();
+    result.push(current.value);
+    if (current.left) {
+      queue.push(current.left);
+    }
+    if (current.right) {
+      queue.push(current.right);
+    }
+  }
+  return result;
+}
+// console.log(levelOrder(node));/
+
+/*
+Level Order Traversal (Breadth-First Search, BFS)
+*/
+function levelOrder(node) {
+  const queue = [];
+  let result = [];
+
+  queue.push(node);
+
+  while (queue.length) {
+    let size = queue.length;
+    let level = [];
+
+    for (let i = 0; i < size; i++) {
+      let current = queue.shift();
+      level.push(current.value);
+
+      if (current.left) {
+        queue.push(current.left);
+      }
+      if (current.right) {
+        queue.push(current.right);
+      }
+    }
+    result.push(level);
+  }
+  return result;
+}
+// console.log(levelOrder(node));
+
+/*
+🌳 Problem: Maximum Depth of Binary Tree (same like finding height (DFS already done above) but here we go with BFS)
+*/
+function heightUsingBFS(node) {
+  const queue = [];
+  const result = [];
+
+  queue.push(node);
+
+  while (queue.length) {
+    let size = queue.length;
+    const level = [];
+
+    for (let i = 0; i < size; i++) {
+      let current = queue.shift();
+      level.push(current.value);
+
+      if (current.left) queue.push(current.left);
+      if (current.right) queue.push(current.right);
+    }
+    result.push(level);
+  }
+  return result.length;
+}
+// console.log(heightUsingBFS(node));
+
+/*
+--------------------------------------------------------------------------
+Problem: Diameter of a Binary Tree (using BFS, as DFS already done above)
+*/
+//TODO : ill do it later
