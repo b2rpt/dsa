@@ -19,6 +19,12 @@ node.left.right = new TreeNode(5);
 // console.log(node);
 
 /*----------------------DFS-depth first approach--------------
+        1
+       /  \
+      2    3
+     / \   / \
+    4   5 null null
+
 1. preOder - Root->Left->Right
 2.inOrder  - Left->Root->Right
 3.postOrder- Left->Right->Root
@@ -282,20 +288,69 @@ function getLCA(node, p, q) {
 // console.log(getLCA(node, 4, 5)?.value);
 
 /*
--------------------------------------------
-Stage 4: Binary Search Tree (BST) (BFS)
------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                               Stage 4: Binary Search Tree (BST) (BFS)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 DFS (recursion) → goes deep into one branch before moving to another.
 BFS (queue) → goes level by level, perfect for this problem.
+        10
+       /  \
+      5    15
+     / \   / \
+    2   7 12  20
+
 */
 
+const root = new TreeNode(10);
+
+root.left = new TreeNode(5);
+root.right = new TreeNode(15);
+
+root.left.left = new TreeNode(2);
+root.left.right = new TreeNode(7);
+
+root.right.left = new TreeNode(12);
+root.right.right = new TreeNode(20);
+
+/*
+--------------------------------------------------------------------------
+way to check a BST (min/max bounds) 1. recursion 2. stack
+*/
+//1 . recursion
+function isBST(root, min = -Infinity, max = Infinity) {
+  if (root == null) return true;
+
+  if (root.value > min && root.value < max) {
+    return (
+      isBST(root.left, min, root.value) && isBST(root.right, root.value, max)
+    );
+  } else {
+    return false;
+  }
+}
+
+//2. via stack
+function isBST(root) {
+  if (root == null) return true;
+  const stack = [[root, -Infinity, Infinity]];
+
+  while (stack.length) {
+    const [root, min, max] = stack.pop();
+    if (root.value <= min || root.value >= max) return false;
+    if (root.left) stack.push([root.left, min, root.value]);
+    if (root.right) stack.push([root.right, root.value, max]);
+  }
+  return true;
+}
+// console.log(isBST(root));
+
 //Problem: flat Level Order Traversal (Breadth-First Search, BFS) (next question is actual level)
-function levelOrder(node) {
+function levelOrder(root) {
   const queue = [];
   let result = [];
 
-  queue.push(node);
+  queue.push(root);
 
   while (queue.length) {
     let current = queue.shift();
@@ -309,16 +364,16 @@ function levelOrder(node) {
   }
   return result;
 }
-// console.log(levelOrder(node));/
+// console.log(levelOrder(root));/
 
 /*
 Level Order Traversal (Breadth-First Search, BFS)
 */
-function levelOrder(node) {
+function levelOrder(root) {
   const queue = [];
   let result = [];
 
-  queue.push(node);
+  queue.push(root);
 
   while (queue.length) {
     let size = queue.length;
@@ -339,16 +394,16 @@ function levelOrder(node) {
   }
   return result;
 }
-// console.log(levelOrder(node));
+// console.log(levelOrder(root));
 
 /*
 🌳 Problem: Maximum Depth of Binary Tree (same like finding height (DFS already done above) but here we go with BFS)
 */
-function heightUsingBFS(node) {
+function heightUsingBFS(root) {
   const queue = [];
   const result = [];
 
-  queue.push(node);
+  queue.push(root);
 
   while (queue.length) {
     let size = queue.length;
@@ -365,10 +420,157 @@ function heightUsingBFS(node) {
   }
   return result.length;
 }
-// console.log(heightUsingBFS(node));
+// console.log(heightUsingBFS(root));
 
 /*
 --------------------------------------------------------------------------
 Problem: Diameter of a Binary Tree (using BFS, as DFS already done above)
 */
-//TODO : ill do it later
+//TODO :  do it later
+
+/*
+--------------------------------------------------------------------------
+Search in BST 1. recursion 2. iterative 
+*/
+//1. recursion version
+function searchBST(root, key) {
+  if (root == null) return false;
+  if (root.value === key) return true;
+
+  if (key > root.value) {
+    return searchBST(root.right, key);
+  } else {
+    return searchBST(root.left, key);
+  }
+}
+// console.log(searchBST(root, 5));
+
+//2. iterative version
+function isTreeBST(root, key) {
+  while (root != null) {
+    if (root.value === key) return true;
+    if (key > root.value) {
+      root = root.right;
+    } else root = root.left;
+  }
+  return false;
+}
+// console.log(isTreeBST(root, 5));
+
+/*
+-----------------------------------------------------------------------------
+Recursive BST insertion
+*/
+
+function insertionInBst(root, key) {
+  if (root == null) return { value: key, left: null, right: null };
+  if (key > root.value) {
+    root.right = insertionInBst(root.right, key);
+  } else if (key < root.value) {
+    root.left = insertionInBst(root.left, key);
+  }
+  return root;
+}
+// console.log(insertionInBst(root, 5));
+
+/*
+-------------------------------------------------------------------------------
+Delete a root in BST
+*/
+
+function deleteNode(root, key) {
+  if (root == null) return null;
+
+  if (key > root.value) {
+    root.right = deleteNode(root.right, key);
+  } else if (key < root.value) {
+    root.left = deleteNode(root.left, key);
+  } else {
+    if (root.left == null && root.right == null) return null;
+
+    if (root.left == null) return root.right;
+    if (root.right == null) return root.left;
+
+    let successor = findMin(root.right);
+    root.value = successor.value;
+
+    root.right = deleteNode(root.right, successor.value);
+  }
+}
+
+function findMin(root) {
+  if (root.left == null) return root;
+  return findMin(root.left);
+}
+
+/*
+---------------------------------------------------------------------------
+Problem: Path Sum (Root-to-Leaf)
+Given the root of a binary tree and an integer targetSum, 
+return true if the tree has a root-to-leaf path such that the sum of all values along the path equals targetSum.
+*/
+
+//1. using recursion.
+
+function isTargetSumInTree(root, target) {
+  if (root == null) return false;
+  if (root.left == null && root.right == null) {
+    return target === root.value;
+  }
+
+  return (
+    isTargetSumInTree(root.left, target - root.value) ||
+    isTargetSumInTree(root.right, target - root.value)
+  );
+}
+console.log(isTargetSumInTree(root, 22));
+
+// 2. BST
+function isTargetSumInBinaryTree(root, target) {
+  if (root == null) return false;
+
+  let queue = [{ node: root, sum: root.value }];
+
+  while (queue.length > 0) {
+    const { node, sum } = queue.shift();
+
+    if (node.left == null && node.right == null && sum === target) {
+      return true;
+    }
+
+    if (node.left) {
+      queue.push({ node: node.left, sum: sum + node.left.value });
+    }
+
+    if (node.right) {
+      queue.push({ node: node.right, sum: sum + node.right.value });
+    }
+  }
+
+  return false;
+}
+
+console.log(isTargetSumInBinaryTree(root, 22));
+
+/*
+------------------------------------------------------------------------------------
+Given a binary tree and a target sum, 
+return all root-to-leaf paths (not true/false) where the sum equals the given target.
+*/
+
+function findPathsWithTargetSum(root, target, path = [], result = []) {
+  if (root == null) return;
+
+  path.push(root.value);
+
+  if (root.left == null && root.right == null && target === root.value) {
+    result.push([...path]);
+  } else {
+    findPathsWithTargetSum(root.left, target - root.value, path, result);
+    findPathsWithTargetSum(root.right, target - root.value, path, result);
+  }
+
+  path.pop();
+  return result;
+}
+console.log(findPathsWithTargetSum(root, 22));
