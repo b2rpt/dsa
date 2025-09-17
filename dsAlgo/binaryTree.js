@@ -555,7 +555,7 @@ console.log(isTargetSumInBinaryTree(root, 22));
 /*
 ------------------------------------------------------------------------------------
 Given a binary tree and a target sum, 
-return all root-to-leaf paths (not true/false) where the sum equals the given target.
+return all root-to-leaf paths (not true/false) where the sum equals the given target. (Hint: Backtracking approach)
 */
 
 function findPathsWithTargetSum(root, target, path = [], result = []) {
@@ -574,3 +574,38 @@ function findPathsWithTargetSum(root, target, path = [], result = []) {
   return result;
 }
 console.log(findPathsWithTargetSum(root, 22));
+
+/*
+-------------------------------------------------------------------------------------------
+Question: Count All Paths with Target Sum (not just root-to-leaf)
+*/
+//1. brute force (O(n²) worst case) for Path Sum III
+function countPathSumFromAnyNode(root, target) {
+  if (!root) return 0;
+
+  // Step 1: Count all paths starting from this root
+  let pathsFromRoot = dfsFromNode(root, target);
+
+  // Step 2: Recursively count paths from left and right subtrees
+  let pathsFromLeft = countPathSumFromAnyNode(root.left, target);
+  let pathsFromRight = countPathSumFromAnyNode(root.right, target);
+
+  // Step 3: Return the total count
+  return pathsFromRoot + pathsFromLeft + pathsFromRight;
+}
+
+function dfsFromNode(node, remainingSum) {
+  if (!node) return 0;
+
+  let count = 0;
+  if (node.value === remainingSum) count++;
+
+  count += dfsFromNode(node.left, remainingSum - node.value);
+  count += dfsFromNode(node.right, remainingSum - node.value);
+
+  return count;
+}
+
+//2. Optimized Idea (Prefix Sum + HashMap)
+// Each node visited once → O(n).
+// Space → HashMap of prefix sums → O(n) in worst case.
