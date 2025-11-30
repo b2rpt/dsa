@@ -60,7 +60,7 @@ function climbStairsBF(n) {
   if (n <= 1) return n;
   return climbStairsBF(n - 1) + climbStairsBF(n - 2);
 }
-console.log(climbStairsBF);
+// console.log(climbStairsBF);
 
 //optimized way DP
 function climbStairsDP(n) {
@@ -75,7 +75,7 @@ function climbStairsDP(n) {
   }
   return curr;
 }
-console.log(climbStairsDP(5));
+// console.log(climbStairsDP(5));
 
 //-----------------------------------------------------------------------------------------------------------------
 // 746. Min Cost Climbing Stairs
@@ -111,3 +111,116 @@ function minCostClimbingStairs(cost = []) {
   return Math.min(solve(n - 1), solve(n - 2));
 }
 // console.log(minCostClimbingStairs([10, 15, 20]));
+
+//DP (Bottom up approach)
+function minCostClimbingStairs(cost = []) {
+  let n = cost.length;
+  let dp = new Array(n);
+  dp[0] = cost[0];
+  dp[1] = cost[1];
+
+  for (let i = 2; i < n; i++) {
+    dp[i] = cost[i] + Math.min(dp[i - 1], dp[i - 2]);
+  }
+  return Math.min(dp[n - 1], dp[n - 2]);
+}
+// console.log(minCostClimbingStairs([10, 15, 20]));
+
+// DP with space and time O(n)
+function minCostClimbingStairs(cost = []) {
+  let prev = cost[0];
+  let curr = cost[1];
+
+  for (let i = 2; i < cost.length; i++) {
+    const next = cost[i] + Math.min(prev, curr);
+    prev = curr;
+    curr = next;
+  }
+  return Math.min(prev, curr);
+}
+// console.log(minCostClimbingStairs([10, 15, 25]));
+
+//--------------------------------------------------------------------------------------------------
+// HOUSE ROBBER — Problem
+/*
+There are houses in a row.
+Each house has some money.
+But you cannot rob two adjacent houses,
+because doing so will trigger the alarm.
+❓ Goal:
+Find the maximum amount of money you can rob without robbing adjacent houses.
+*/
+
+//Brute force
+function rob(nums = []) {
+  function solve(i) {
+    if (i === 0) return nums[0];
+    if (i === 1) return Math.max(nums[0], nums[1]);
+
+    const robThis = nums[i] + solve(i - 2);
+    const skipThis = solve(i - 1);
+
+    return Math.max(robThis, skipThis);
+  }
+
+  return solve(nums.length - 1);
+}
+// console.log(rob([4, 1, 2, 7, 5, 3, 1]));
+
+//DP with memo
+function rob(nums = []) {
+  const memo = {};
+  function solve(i) {
+    if (i === 0) return nums[0];
+    if (i === 1) return Math.max(nums[0], nums[1]);
+
+    if (memo[i] !== undefined) return memo[i];
+    const robThis = nums[i] + solve(i - 2);
+    const skipThis = solve(i - 1);
+
+    memo[i] = Math.max(robThis, skipThis);
+    return memo[i];
+  }
+
+  return solve(nums.length - 1);
+}
+// console.log(rob([4, 1, 2, 7, 5, 3, 1]));
+
+//DP - Bottom Up Approach
+function rob(nums = []) {
+  const n = nums.length;
+  if (n === 0) return 0;
+  if (n === 1) return nums[0];
+
+  dp[0] = nums[0];
+  dp[1] = Math.max(nums[0], nums[1]);
+
+  for (let i = 2; i < n; i++) {
+    const rob = nums[i] + dp[i - 2];
+    const skip = dp[i - 1];
+    dp[i] = Math.max(rob, skip);
+  }
+  return dp[n - 1];
+}
+// console.log(rob([4, 1, 2, 7, 5, 3, 1]));
+
+//DP by tabular
+function rob(nums = []) {
+  const n = nums.length;
+  if (n === 0) return 0;
+  if (n === 1) return nums[0];
+
+  let prev = nums[0];
+  let curr = Math.max(nums[0], nums[1]);
+
+  for (let i = 2; i < n; i++) {
+    const rob = nums[i] + prev;
+    const skip = curr;
+    const next = Math.max(rob, skip);
+
+    prev = curr;
+    curr = next;
+  }
+  return curr;
+}
+console.log(rob([4, 1, 2, 7, 5, 3, 1]));
