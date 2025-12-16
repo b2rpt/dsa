@@ -192,6 +192,7 @@ function rob(nums = []) {
   if (n === 0) return 0;
   if (n === 1) return nums[0];
 
+  let dp = new Array(n);
   dp[0] = nums[0];
   dp[1] = Math.max(nums[0], nums[1]);
 
@@ -223,4 +224,72 @@ function rob(nums = []) {
   }
   return curr;
 }
-console.log(rob([4, 1, 2, 7, 5, 3, 1]));
+// console.log(rob([4, 1, 2, 7, 5, 3, 1]));
+
+//------------------------------------------------------------------------------------------
+/*
+213. House Robber II
+You are a professional robber planning to rob houses along a street. 
+Each house has a certain amount of money stashed. 
+All houses at this place are arranged in a circle. 
+That means the first house is the neighbor of the last one. 
+Meanwhile, adjacent houses have a security system connected, 
+and it will automatically contact the police if two adjacent houses were broken into on the same night.
+*/
+
+function rob2(nums = []) {
+  const n = nums.length;
+  if (n === 0) return 0;
+  if (n === 1) return nums[0];
+  function robLinear(nums) {
+    let n = nums.length;
+    if (n === 0) return 0;
+    if (n === 1) return nums[0];
+    let prev = nums[0];
+    let curr = Math.max(nums[0], nums[1]);
+
+    for (let i = 2; i < n; i++) {
+      const rob = nums[i] + prev;
+      const skip = curr;
+      const next = Math.max(rob, skip);
+
+      prev = curr;
+      curr = next;
+    }
+    return curr;
+  }
+  const case1 = robLinear(nums.slice(0, n - 1));
+  const case2 = robLinear(nums.slice(1));
+
+  return Math.max(case1, case2);
+}
+// console.log(rob2([0, 0]));
+
+//----------------------------------------------------------------------------------------
+/* unique path 
+2D Grid DP
+leet code #62
+*/
+
+//Brute force approach 
+uniquePaths = function (m, n) {
+  function solve(i, j) {
+    if (i >= m || j >= n) return 0;
+    if (i === m - 1 && j === n - 1) return 1;
+    return solve(i, j + 1) + solve(i + 1, j);
+  }
+  return solve(0, 0);
+};
+console.log(uniquePaths(30, 70));
+
+//Memo DP approach 
+uniquePaths = function (m, n) {
+  function solve(i, j) {
+    if (i >= m || j >= n) return 0;
+    if (i === m - 1 && j === n - 1) return 1;
+    memo[] = solve(i, j + 1) + solve(i + 1, j);
+    return memo;
+  }
+  return solve(0, 0);
+};
+console.log(uniquePaths(30, 70));
